@@ -3,14 +3,13 @@ package main
 import (
 	"app/db"
 	"app/router"
-	"fmt"
 )
 
 func main() {
-	db, _ := db.Open()
-	defer db.Close()
-	router := &router.Config{DB: db}
-	router.Up()
+	DB, _ := db.Open()
+	defer DB.Close()
 
-	fmt.Printf("db: %s\n", db)
+	//: Router init
+	router := &router.Config{DB: DB}
+	router.Up()
 }
