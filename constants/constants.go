@@ -1,0 +1,4 @@
+package constants
+
+func init() {
+}
