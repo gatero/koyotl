@@ -1,0 +1,3 @@
+[submodule ".mestli"]
+	path = .mestli
+	url = git@github.com:gatero/metstli.git
