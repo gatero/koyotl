@@ -3,9 +3,11 @@ package profile
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	mgo "gopkg.in/mgo.v2"
 )
 
 type Model struct {
@@ -20,12 +22,16 @@ type Profile struct {
 }
 
 func (m *Model) Create(c *gin.Context) {
-	fmt.Println("profile test create method")
 	c.String(http.StatusOK, "hello")
 }
 
 func (m *Model) Find(c *gin.Context) {
-	fmt.Println("profile test create method")
+	session, error := mgo.Dial(os.Getenv("MONGO_CONTAINER"))
+	if error != nil {
+		panic(error)
+	}
+	fmt.Printf("%s", session)
+	c.String(http.StatusOK, "hello")
 }
 
 func (m *Model) Update(c *gin.Context) {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	mgo "gopkg.in/mgo.v2"
 )
 
 var MYSQL_HOST string = os.Getenv("MYSQL_CONTAINER")
@@ -22,6 +23,12 @@ var MYSQL_CONNECTION_STRING string = fmt.Sprintf(
 	MYSQL_DATABASE,
 )
 
-func Open() (*gorm.DB, error) {
+func OpenMySQL() (*gorm.DB, error) {
 	return gorm.Open("mysql", MYSQL_CONNECTION_STRING)
+}
+
+var MONGO_CONTAINER string = os.Getenv("MONGO_CONTAINER")
+
+func OpenMongo() (*mgo.Session, error) {
+	return mgo.Dial(MONGO_CONTAINER)
 }
