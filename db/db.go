@@ -10,6 +10,7 @@ import (
 )
 
 var (
+	// mysql
 	MYSQL_HOST              string = os.Getenv("MYSQL_CONTAINER")
 	MYSQL_DATABASE          string = os.Getenv("MYSQL_DATABASE")
 	MYSQL_PORT              string = os.Getenv("MYSQL_PORT")
@@ -23,13 +24,13 @@ var (
 		MYSQL_PORT,
 		MYSQL_DATABASE,
 	)
+	// mongo
+	MONGO_CONTAINER string = os.Getenv("MONGO_CONTAINER")
 )
 
 func OpenMySQL() (*gorm.DB, error) {
 	return gorm.Open("mysql", MYSQL_CONNECTION_STRING)
 }
-
-var MONGO_CONTAINER string = os.Getenv("MONGO_CONTAINER")
 
 func OpenMongo() (*mgo.Session, error) {
 	return mgo.Dial(MONGO_CONTAINER)
