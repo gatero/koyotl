@@ -2,6 +2,7 @@ package router
 
 import (
 	"app/profile"
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -22,5 +23,9 @@ func (c Config) Up() {
 	router.PUT("/profile", profile.Update)
 	router.DELETE("/profile", profile.Delete)
 
-	router.Run(os.Getenv("API_EXPOSED_PORT"))
+	API_EXPOSED_PORT := fmt.Sprintf(
+		":%s",
+		os.Getenv("API_EXPOSED_PORT"),
+	)
+	router.Run(API_EXPOSED_PORT)
 }
