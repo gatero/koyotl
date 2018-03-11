@@ -3,11 +3,14 @@ package db
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	mgo "gopkg.in/mgo.v2"
 )
+
+//: MYSQL
 
 type Mysql struct {
 	Host     string
@@ -36,11 +39,22 @@ func (m *Mysql) Open() (*gorm.DB, error) {
 	return gorm.Open("mysql", MYSQL_CONNECTION_STRING)
 }
 
+//: MONGO DB
+
 type Mongo struct {
 	Container string
 }
 
 func (m *Mongo) Open() (*mgo.Session, error) {
 	m.Container = os.Getenv("MONGO_CONTAINER")
-	return mgo.Dial(m.Container)
+
+	MONGO_CONNECTION_PARAMS := &mgo.DialInfo{
+		Addrs:    []string{m.Container},
+		Timeout:  60 * time.Second,
+		Database: os.Getenv("MONGO_DATABASE"),
+		Username: os.Getenv("MONGO_USERNAME"),
+		Password: os.Getenv("MONGO_PASSWORD"),
+	}
+
+	return mgo.DialWithInfo(MONGO_CONNECTION_PARAMS)
 }
