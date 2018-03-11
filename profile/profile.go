@@ -1,13 +1,12 @@
 package profile
 
 import (
+	"app/db"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	mgo "gopkg.in/mgo.v2"
 )
 
 type Model struct {
@@ -26,10 +25,8 @@ func (m *Model) Create(c *gin.Context) {
 }
 
 func (m *Model) Find(c *gin.Context) {
-	session, error := mgo.Dial(os.Getenv("MONGO_CONTAINER"))
-	if error != nil {
-		panic(error)
-	}
+	mongo := db.Mongo{}
+	session, _ := mongo.Open()
 	fmt.Printf("%s", session)
 	c.String(http.StatusOK, "hello")
 }

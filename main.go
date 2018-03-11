@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	DB, _ := db.OpenMySQL()
+	mysql := &db.Mysql{}
+	DB, _ := mysql.Open()
 	defer DB.Close()
 
 	//: Router init

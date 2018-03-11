@@ -9,29 +9,38 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
-var (
-	// mysql
-	MYSQL_HOST              string = os.Getenv("MYSQL_CONTAINER")
-	MYSQL_DATABASE          string = os.Getenv("MYSQL_DATABASE")
-	MYSQL_PORT              string = os.Getenv("MYSQL_PORT")
-	MYSQL_USERNAME          string = os.Getenv("MYSQL_USERNAME")
-	MYSQL_PASSWORD          string = os.Getenv("MYSQL_ROOT_PASSWORD")
-	MYSQL_CONNECTION_STRING string = fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8",
-		MYSQL_USERNAME,
-		MYSQL_PASSWORD,
-		MYSQL_HOST,
-		MYSQL_PORT,
-		MYSQL_DATABASE,
-	)
-	// mongo
-	MONGO_CONTAINER string = os.Getenv("MONGO_CONTAINER")
-)
+type Mysql struct {
+	Host     string
+	Database string
+	Port     string
+	Username string
+	Password string
+}
 
-func OpenMySQL() (*gorm.DB, error) {
+func (m *Mysql) Open() (*gorm.DB, error) {
+	m.Host = os.Getenv("MYSQL_CONTAINER")
+	m.Database = os.Getenv("MYSQL_DATABASE")
+	m.Port = os.Getenv("MYSQL_PORT")
+	m.Username = os.Getenv("MYSQL_USERNAME")
+	m.Password = os.Getenv("MYSQL_PASSWORD")
+
+	MYSQL_CONNECTION_STRING := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8",
+		m.Host,
+		m.Database,
+		m.Port,
+		m.Username,
+		m.Password,
+	)
+
 	return gorm.Open("mysql", MYSQL_CONNECTION_STRING)
 }
 
-func OpenMongo() (*mgo.Session, error) {
-	return mgo.Dial(MONGO_CONTAINER)
+type Mongo struct {
+	Container string
+}
+
+func (m *Mongo) Open() (*mgo.Session, error) {
+	m.Container = os.Getenv("MONGO_CONTAINER")
+	return mgo.Dial(m.Container)
 }
