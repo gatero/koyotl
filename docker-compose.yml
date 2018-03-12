@@ -1,1 +1,1 @@
-.mestli/docker/docker-compose.yml
+.mestli/docker-compose/golang-mysql-mongo.yml
