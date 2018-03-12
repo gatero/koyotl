@@ -52,8 +52,8 @@ func (m *Mongo) Open() (*mgo.Session, error) {
 		Addrs:    []string{m.Container},
 		Timeout:  60 * time.Second,
 		Database: os.Getenv("MONGO_DATABASE"),
-		Username: os.Getenv("MONGO_USERNAME"),
-		Password: os.Getenv("MONGO_PASSWORD"),
+		Username: os.Getenv("MONGO_INITDB_ROOT_USERNAME"),
+		Password: os.Getenv("MONGO_INITDB_ROOT_PASSWORD"),
 	}
 
 	return mgo.DialWithInfo(MONGO_CONNECTION_PARAMS)

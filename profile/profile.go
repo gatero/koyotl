@@ -6,12 +6,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
-type Model struct {
-	DB *gorm.DB
-}
+type Model struct{}
 
 type Profile struct {
 	FirstName string

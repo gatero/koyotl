@@ -6,17 +6,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
-type Config struct {
-	DB *gorm.DB
-}
+type Config struct{}
 
 func (c Config) Up() {
 	router := gin.Default()
 
-	profile := &profile.Model{DB: c.DB}
+	profile := &profile.Model{}
 
 	router.GET("/profile", profile.Find)
 	router.POST("/profile", profile.Create)

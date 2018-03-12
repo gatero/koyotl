@@ -11,6 +11,6 @@ func main() {
 	defer DB.Close()
 
 	//: Router init
-	router := &router.Config{DB: DB}
+	router := &router.Config{}
 	router.Up()
 }
