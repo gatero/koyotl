@@ -13,18 +13,16 @@ func Update(c *gin.Context) {
 	defer session.Close()
 
 	p := session.DB(MONGO_DATABASE).C(COLLECTION)
+	id := bson.M{"_id": bson.ObjectIdHex(c.Param("id"))}
 
 	profile := Profile{
-		Id:        bson.ObjectIdHex(c.PostForm("id")),
+		Id:        bson.ObjectIdHex(c.Param("id")),
 		FirstName: c.PostForm("firstName"),
 		LastName:  c.PostForm("lastName"),
 		Birthday:  c.PostForm("birthday"),
 	}
 
-	id := bson.M{"_id": profile.Id}
-
 	err := p.Update(id, &profile)
-
 	if err != nil {
 		panic(err)
 	}

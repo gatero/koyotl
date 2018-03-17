@@ -1,11 +1,8 @@
 package main
 
 import (
-	"app/router"
+	_ "app/router"
 )
 
 func main() {
-	//: Router
-	router := &router.Config{}
-	router.Up()
 }

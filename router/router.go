@@ -9,17 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Config struct{}
-
-func (c Config) Up() {
+func init() {
 	router := gin.Default()
 	router.Use(cors.Setup())
 
-	//: Routes
+	//: Profile routes
+	router.POST("/profile", profile.Create)
 	router.GET("/profile", profile.Find)
 	router.GET("/profile/:id", profile.FindById)
-	router.POST("/profile", profile.Create)
-	router.PUT("/profile", profile.Update)
+	router.PUT("/profile/:id", profile.Update)
 	router.DELETE("/profile/:id", profile.DeleteById)
 
 	//: Run router
