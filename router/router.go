@@ -2,6 +2,7 @@ package router
 
 import (
 	"app/cors"
+	"app/firebase"
 	"app/profile"
 	"fmt"
 	"os"
@@ -12,6 +13,7 @@ import (
 func init() {
 	router := gin.Default()
 	router.Use(cors.Setup())
+	router.Use(firebase.VerifyToken())
 
 	//: Profile routes
 	router.POST("/profile", profile.Create)

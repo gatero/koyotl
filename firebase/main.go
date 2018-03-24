@@ -9,12 +9,12 @@ import (
 	googleOption "google.golang.org/api/option"
 )
 
-func VerifyAuthorization() gin.HandlerFunc {
+func VerifyToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authorization := c.GetHeader("Authorization")
 
 		if len(authorization) > 0 {
-			opt := googleOption.WithCredentialsFile("config/firebase-admin-development.json")
+			opt := googleOption.WithCredentialsFile("firebase/config.development.json")
 			app, error := firebaseAdmin.NewApp(context.Background(), nil, opt)
 
 			if error != nil {
