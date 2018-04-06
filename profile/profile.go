@@ -7,10 +7,13 @@ import (
 )
 
 type Profile struct {
-	Id        bson.ObjectId `bson:"_id,omitempty"`
-	FirstName string
-	LastName  string
-	Birthday  string
+	Id         bson.ObjectId `bson:"_id,omitempty"`
+	FirebaseId bson.ObjectId `bson:"firebaseId,omitempty"`
+	FirstName  string
+	Name       string
+	Email      string
+	LastName   string
+	Birthday   string
 }
 
 var MONGO_DATABASE string

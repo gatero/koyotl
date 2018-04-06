@@ -1,6 +1,7 @@
 package firebase
 
 import (
+	"app/profile"
 	"net/http"
 
 	firebaseAdmin "firebase.google.com/go"
@@ -27,7 +28,8 @@ func VerifyToken() gin.HandlerFunc {
 				panic(error)
 			}
 
-			_, error = client.VerifyIDToken(authorization)
+			decodedToken, error := client.VerifyIDToken(authorization)
+			profile.VerifyUser(decodedToken)
 
 			if error != nil {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
