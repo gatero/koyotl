@@ -16,11 +16,11 @@ func init() {
 	router.Use(firebase.VerifyToken())
 
 	//: Profile routes
-	router.POST("/profile", profile.Create)
-	router.GET("/profile", profile.Find)
-	router.GET("/profile/:id", profile.FindById)
-	router.PUT("/profile/:id", profile.Update)
-	router.DELETE("/profile/:id", profile.DeleteById)
+	router.POST("/profile", profile.RH_Create)
+	//router.GET("/profile", profile.FindProfileRouteHandler)
+	//router.GET("/profile/:id", profile.FindByIdProfileRouteHandler)
+	//router.PUT("/profile/:id", profile.UpdateProfileRouteHandler)
+	//router.DELETE("/profile/:id", profile.DeleteByIdProfileRouteHandler)
 
 	//: Run router
 	API_EXPOSED_PORT := os.Getenv("API_EXPOSED_PORT")

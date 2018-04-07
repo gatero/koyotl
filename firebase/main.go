@@ -2,6 +2,7 @@ package firebase
 
 import (
 	"app/profile"
+	"fmt"
 	"net/http"
 
 	firebaseAdmin "firebase.google.com/go"
@@ -10,11 +11,14 @@ import (
 	googleOption "google.golang.org/api/option"
 )
 
+var TOKEN string = "Token"
+
 func VerifyToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authorization := c.GetHeader("Authorization")
+		token := c.GetHeader(TOKEN)
+		fmt.Printf("\n\nToken header %s\n\n", token)
 
-		if len(authorization) > 0 {
+		if len(token) > 0 {
 			opt := googleOption.WithCredentialsFile("firebase/config.development.json")
 			app, error := firebaseAdmin.NewApp(context.Background(), nil, opt)
 
@@ -23,13 +27,15 @@ func VerifyToken() gin.HandlerFunc {
 			}
 
 			client, error := app.Auth(context.Background())
+			fmt.Printf("\n\nClient: %s\n\n", client)
 
 			if error != nil {
 				panic(error)
 			}
 
-			decodedToken, error := client.VerifyIDToken(authorization)
-			profile.VerifyUser(decodedToken)
+			decodedToken, error := client.VerifyIDToken(token)
+			fmt.Printf("\n\n DECODED TOKEN: %s\n\n", decodedToken)
+			profile.VerifyToken(decodedToken)
 
 			if error != nil {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
@@ -43,7 +49,7 @@ func VerifyToken() gin.HandlerFunc {
 		} else {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  http.StatusUnauthorized,
-				"type":    "NoToken",
+				"type":    "Token",
 				"message": "No token present in the request",
 			})
 		}

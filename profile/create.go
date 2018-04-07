@@ -6,27 +6,30 @@ import (
 
 	"github.com/gin-gonic/gin"
 	mgo "gopkg.in/mgo.v2"
-	bson "gopkg.in/mgo.v2/bson"
 )
 
-func Create(c *gin.Context) {
-	session, _ := db.Mongo()
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
+func Create(p *Profile) (*Profile, error) {
+	s, e := db.Mongo()
+	if e != nil {
+		panic(e)
+	}
+	defer s.Close()
+	s.SetMode(mgo.Monotonic, true)
 
-	p := session.DB(MONGO_DATABASE).C(COLLECTION)
+	c := s.DB(MONGO_DATABASE).C(COLLECTION)
 
-	profile := &Profile{
-		Id:        bson.NewObjectId(),
-		FirstName: c.PostForm("firstName"),
-		LastName:  c.PostForm("lastName"),
-		Birthday:  c.PostForm("birthday"),
+	if e := c.Insert(p); e != nil {
+		return nil, e
 	}
 
-	err := p.Insert(profile)
-	if err != nil {
-		panic(err)
-	}
+	return p, nil
+}
 
-	c.JSON(http.StatusOK, profile)
+func RH_Create(c *gin.Context) {
+	var p Profile
+	if e := c.ShouldBindJSON(&p); e == nil {
+		if p, e := Create(&p); e == nil {
+			c.JSON(http.StatusOK, p)
+		}
+	}
 }

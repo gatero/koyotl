@@ -9,40 +9,40 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func VerifyUser(decodedToken *auth.Token) {
-	session, _ := db.Mongo()
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
+func VerifyToken(t *auth.Token) {
+	fmt.Printf("\n\nTOKEN: %s\n\n", t)
+	s, e := db.Mongo()
+	if e != nil {
+		panic(e)
+	}
+	s.SetMode(mgo.Monotonic, true)
 
-	p := session.DB(MONGO_DATABASE).C(COLLECTION)
+	c := s.DB(MONGO_DATABASE).C(COLLECTION)
 
-	profile := &Profile{
-		Id:         bson.NewObjectId(),
-		FirebaseId: bson.ObjectIdHex(decodedToken.UID),
-		Name:       decodedToken.Claims["firstName"].(string),
-		FirstName:  "",
-		LastName:   "",
-		Email:      decodedToken.Claims["email"].(string),
-		Birthday:   "",
+	p := Profile{
+		Id:    t.UID,
+		Name:  t.Claims["name"].(string),
+		Email: t.Claims["email"].(string),
 	}
 
-	email := bson.M{"Email": profile.Email}
-	result := Profile{}
-	err := p.Find(email).One(&result)
+	fmt.Printf("decoded: %s", t)
+
+	r := Profile{}
+	email := bson.M{"Email": p.Email}
+	err := c.Find(email).One(&r)
 
 	if err != nil {
 		fmt.Printf("error: %s", err)
 	}
 
-	if (Profile{}) == result {
+	if (Profile{}) == r {
 		return
 	}
 
-	err = p.Insert(profile)
-	if err != nil {
-		panic(err)
+	if p, err := Create(&p); err == nil {
+		fmt.Printf("New profile was created: %s", p)
 	}
 
-	//firebase := decodedToken.Claims["firebase"].(map[string]interface{})
+	//firebase := t.Claims["firebase"].(map[string]interface{})
 	//identities := firebase["identities"].(map[string]interface{})
 }

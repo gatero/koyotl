@@ -15,7 +15,7 @@ func Setup() gin.HandlerFunc {
 	return corsHandler.New(
 		corsHandler.Config{
 			AllowOrigins: []string{STATIC_CONTAINER},
-			AllowHeaders: []string{"Authorization"},
+			AllowHeaders: []string{"Token"},
 		},
 	)
 }

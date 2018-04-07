@@ -16,7 +16,6 @@ func Update(c *gin.Context) {
 	id := bson.M{"_id": bson.ObjectIdHex(c.Param("id"))}
 
 	profile := Profile{
-		Id:        bson.ObjectIdHex(c.Param("id")),
 		FirstName: c.PostForm("firstName"),
 		LastName:  c.PostForm("lastName"),
 		Birthday:  c.PostForm("birthday"),
