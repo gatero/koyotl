@@ -6,15 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Find(p []Profile) []Profile {
-	if c, e := ProfileC(); e == nil {
-		c.Find(nil).All(&p)
+func RH_Find(ctx *gin.Context) {
+	c, e := ProfileC()
+	if e != nil {
+		panic(e)
 	}
-	return p
-}
 
-func RH_Find(c *gin.Context) {
 	var profiles []Profile
-	Find(profiles)
-	c.JSON(http.StatusOK, profiles)
+	c.Find(nil).All(&profiles)
+
+	ctx.JSON(http.StatusOK, profiles)
 }
