@@ -1,22 +1,16 @@
 package profile
 
 import (
-	"app/db"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	mgo "gopkg.in/mgo.v2"
 )
 
 func Create(p *Profile) (*Profile, error) {
-	s, e := db.Mongo()
+	c, e := ProfileC()
 	if e != nil {
 		panic(e)
 	}
-	defer s.Close()
-	s.SetMode(mgo.Monotonic, true)
-
-	c := s.DB(MONGO_DATABASE).C(COLLECTION)
 
 	if e := c.Insert(p); e != nil {
 		return nil, e

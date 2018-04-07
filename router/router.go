@@ -17,7 +17,7 @@ func init() {
 
 	//: Profile routes
 	router.POST("/profile", profile.RH_Create)
-	//router.GET("/profile", profile.FindProfileRouteHandler)
+	router.GET("/profile", profile.RH_Find)
 	//router.GET("/profile/:id", profile.FindByIdProfileRouteHandler)
 	//router.PUT("/profile/:id", profile.UpdateProfileRouteHandler)
 	//router.DELETE("/profile/:id", profile.DeleteByIdProfileRouteHandler)

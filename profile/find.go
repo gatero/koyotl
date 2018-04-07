@@ -1,21 +1,20 @@
 package profile
 
 import (
-	"app/db"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	mgo "gopkg.in/mgo.v2"
 )
 
-func Find(c *gin.Context) {
-	session, _ := db.Mongo()
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
+func Find(p []Profile) []Profile {
+	if c, e := ProfileC(); e == nil {
+		c.Find(nil).All(&p)
+	}
+	return p
+}
 
+func RH_Find(c *gin.Context) {
 	var profiles []Profile
-	p := session.DB(MONGO_DATABASE).C(COLLECTION)
-	p.Find(nil).All(&profiles)
-
+	Find(profiles)
 	c.JSON(http.StatusOK, profiles)
 }

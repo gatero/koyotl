@@ -24,12 +24,12 @@ func init() {
 	COLLECTION = "profile"
 }
 
-func ProfileC() (*mgo.Collection, *mgo.Session, error) {
+func ProfileC() (*mgo.Collection, error) {
 	s, e := db.Mongo()
 	if e != nil {
-		return nil, nil, e
+		return nil, e
 	}
 	s.SetMode(mgo.Monotonic, true)
 
-	return s.DB(MONGO_DATABASE).C(COLLECTION), s, nil
+	return s.DB(MONGO_DATABASE).C(COLLECTION), nil
 }
