@@ -8,7 +8,7 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func Update(c *gin.Context) {
+func RH_Update(c *gin.Context) {
 	session, _ := db.Mongo()
 	defer session.Close()
 

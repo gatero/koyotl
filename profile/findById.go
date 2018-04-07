@@ -9,7 +9,7 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func FindById(c *gin.Context) {
+func RH_FindById(c *gin.Context) {
 	session, _ := db.Mongo()
 	defer session.Close()
 

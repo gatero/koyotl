@@ -18,9 +18,9 @@ func init() {
 	//: Profile routes
 	router.POST("/profile", profile.RH_Create)
 	router.GET("/profile", profile.RH_Find)
-	//router.GET("/profile/:id", profile.FindByIdProfileRouteHandler)
-	//router.PUT("/profile/:id", profile.UpdateProfileRouteHandler)
-	//router.DELETE("/profile/:id", profile.DeleteByIdProfileRouteHandler)
+	router.GET("/profile/:id", profile.RH_FindById)
+	router.PUT("/profile/:id", profile.RH_Update)
+	router.DELETE("/profile/:id", profile.RH_DeleteById)
 
 	//: Run router
 	API_EXPOSED_PORT := os.Getenv("API_EXPOSED_PORT")
