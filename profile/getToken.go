@@ -1,6 +1,8 @@
 package profile
 
 import (
+	"fmt"
+
 	firebaseAdmin "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"golang.org/x/net/context"
@@ -8,6 +10,7 @@ import (
 )
 
 func GetToken(token string) (*auth.Token, error) {
+	fmt.Printf("\n\n GetToken TOKEN %s\n\n", token)
 	opt := googleOption.WithCredentialsFile("firebase/config.development.json")
 	app, error := firebaseAdmin.NewApp(context.Background(), nil, opt)
 

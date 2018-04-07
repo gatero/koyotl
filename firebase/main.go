@@ -2,6 +2,7 @@ package firebase
 
 import (
 	"app/profile"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,8 @@ func VerifyToken() gin.HandlerFunc {
 
 		if len(token) > 0 {
 			t, e := profile.GetToken(token)
-			profile.VerifyToken(t)
+			fmt.Printf("\n\nVerifyToken TOKEN: %s\n\n Error %s\n\n", t, e)
+			profile.VerifyProfile(t)
 
 			if e != nil {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
@@ -33,6 +35,5 @@ func VerifyToken() gin.HandlerFunc {
 				"message": "No token present in the request",
 			})
 		}
-
 	}
 }

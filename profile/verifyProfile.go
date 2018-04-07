@@ -1,23 +1,19 @@
 package profile
 
 import (
-	"app/db"
 	"fmt"
 
 	"firebase.google.com/go/auth"
-	mgo "gopkg.in/mgo.v2"
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func VerifyToken(t *auth.Token) {
-	fmt.Printf("\n\nTOKEN: %s\n\n", t)
-	s, e := db.Mongo()
+func VerifyProfile(t *auth.Token) {
+	c, e := ProfileC()
 	if e != nil {
 		panic(e)
 	}
-	s.SetMode(mgo.Monotonic, true)
 
-	c := s.DB(MONGO_DATABASE).C(COLLECTION)
+	fmt.Printf("\n\n VerifyProfile TOKEN %s\n\n", t)
 
 	p := Profile{
 		Id:    t.UID,
@@ -25,22 +21,21 @@ func VerifyToken(t *auth.Token) {
 		Email: t.Claims["email"].(string),
 	}
 
-	fmt.Printf("decoded: %s", t)
-
 	r := Profile{}
-	email := bson.M{"Email": p.Email}
+	email := bson.M{"email": p.Email}
 	err := c.Find(email).One(&r)
 
 	if err != nil {
-		fmt.Printf("error: %s", err)
+		fmt.Printf("\n\nVerify Profile ERROR: %s\n\n", err)
 	}
 
-	if (Profile{}) == r {
+	if (Profile{}) != r {
 		return
 	}
 
-	if p, err := Create(&p); err == nil {
-		fmt.Printf("New profile was created: %s", p)
+	profile, err := Create(&p)
+	if err == nil {
+		fmt.Printf("New profile was created: %s", profile)
 	}
 
 	//firebase := t.Claims["firebase"].(map[string]interface{})

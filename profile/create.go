@@ -21,9 +21,9 @@ func Create(p *Profile) (*Profile, error) {
 
 func RH_Create(c *gin.Context) {
 	var p Profile
-	if e := c.ShouldBindJSON(&p); e == nil {
-		if p, e := Create(&p); e == nil {
-			c.JSON(http.StatusOK, p)
+	if e := c.ShouldBind(&p); e == nil {
+		if profile, e := Create(&p); e == nil {
+			c.JSON(http.StatusOK, profile)
 		}
 	}
 }
