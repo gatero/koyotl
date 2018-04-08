@@ -1,7 +1,6 @@
 package profile
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,15 +8,13 @@ import (
 
 // Find method get all the user instances
 // that exist into the database
-// TODO: Filter the results through a query
-func Find(query Profile) ([]Profile, error) {
+func Find(query map[string]interface{}) ([]Profile, error) {
 	// get the collection pointer
 	c, _ := Collection()
 	// declare and empty array
 	var p []Profile
 	// try to find all the profiles
 	// and store them into the profiles slice
-	fmt.Printf("\n\n QUERY: %#v\n\n", query)
 	if e := c.Find(query).All(&p); e != nil {
 		// if an error is ocurred then the
 		// return the corresponding error
@@ -28,11 +25,11 @@ func Find(query Profile) ([]Profile, error) {
 
 // RH_Find is the route HandlerFunc for find
 func RH_Find(c *gin.Context) {
-	var form Profile
-	c.BindJSON(&form)
+	var query map[string]interface{}
+	c.BindJSON(&query)
 	// try to find all the profiles
 	// and store them into the profiles slice
-	p, e := Find(form)
+	p, e := Find(query)
 
 	if e != nil {
 		// if an error is ocurred then the
