@@ -12,7 +12,7 @@ func RH_DeleteById(ctx *gin.Context) {
 	id := bson.M{"_id": bson.ObjectIdHex(ctx.Param("id"))}
 
 	if err := c.Remove(id); err != nil {
-		panic(err)
+		ctx.JSON(http.StatusInternalServerError, err)
 	}
 
 	ctx.String(http.StatusOK, "The profile %s was deleted successfully !", ctx.Param("id"))

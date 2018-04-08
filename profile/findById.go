@@ -1,26 +1,20 @@
 package profile
 
 import (
-	"app/db"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func RH_FindById(c *gin.Context) {
-	session, _ := db.Mongo()
-	defer session.Close()
-
-	p := session.DB(MONGO_DATABASE).C(COLLECTION)
-	id := bson.M{"_id": bson.ObjectIdHex(c.Param("id"))}
+func RH_FindById(ctx *gin.Context) {
+	collection, _ := ProfileC()
+	id := bson.M{"_id": bson.ObjectIdHex(ctx.Param("id"))}
 	profile := Profile{}
-	err := p.Find(id).One(&profile)
 
-	if err != nil {
-		fmt.Printf("error: %s", err)
+	if err := collection.Find(id).One(&profile); err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
 	}
 
-	c.JSON(http.StatusOK, profile)
+	ctx.JSON(http.StatusOK, profile)
 }

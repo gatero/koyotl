@@ -7,13 +7,12 @@ import (
 )
 
 func RH_Find(ctx *gin.Context) {
-	c, e := ProfileC()
-	if e != nil {
-		panic(e)
-	}
+	c, _ := ProfileC()
 
 	var profiles []Profile
-	c.Find(nil).All(&profiles)
+	if e := c.Find(nil).All(&profiles); e != nil {
+		ctx.JSON(http.StatusInternalServerError, e)
+	}
 
 	ctx.JSON(http.StatusOK, profiles)
 }
