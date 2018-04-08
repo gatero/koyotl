@@ -8,34 +8,29 @@ import (
 )
 
 func VerifyProfile(t *auth.Token) {
-	c, e := ProfileC()
-	if e != nil {
-		panic(e)
-	}
-
-	fmt.Printf("\n\n VerifyProfile TOKEN %s\n\n", t)
+	c, _ := Collection()
 
 	p := Profile{
-		Id:    t.UID,
-		Name:  t.Claims["name"].(string),
-		Email: t.Claims["email"].(string),
+		FirebaseId: t.UID,
+		Name:       t.Claims["name"].(string),
+		Email:      t.Claims["email"].(string),
+		Status:     STATUS_INCOMPPLETE,
+		Role:       ROLE_AUTHOR,
 	}
 
 	r := Profile{}
 	email := bson.M{"email": p.Email}
-	err := c.Find(email).One(&r)
 
-	if err != nil {
-		fmt.Printf("\n\nVerify Profile ERROR: %s\n\n", err)
+	if e := c.Find(email).One(&r); e != nil {
+		fmt.Printf("\n\nVerify Profile ERROR: %s\n\n", e)
 	}
 
 	if (Profile{}) != r {
 		return
 	}
 
-	profile, err := Create(&p)
-	if err == nil {
-		fmt.Printf("New profile was created: %s", profile)
+	if _, e := Create(&p); e == nil {
+		fmt.Printf("New profile was created: %s", p)
 	}
 
 	//firebase := t.Claims["firebase"].(map[string]interface{})

@@ -7,14 +7,24 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func RH_FindById(ctx *gin.Context) {
-	collection, _ := ProfileC()
-	id := bson.M{"_id": bson.ObjectIdHex(ctx.Param("id"))}
-	profile := Profile{}
+func FindById(id string, p *Profile) error {
+	c, _ := Collection()
+	query := bson.M{"_id": bson.ObjectIdHex(id)}
 
-	if err := collection.Find(id).One(&profile); err != nil {
-		ctx.JSON(http.StatusInternalServerError, err)
+	if e := c.Find(query).One(&p); e != nil {
+		return e
 	}
 
-	ctx.JSON(http.StatusOK, profile)
+	return nil
+}
+
+func RH_FindById(c *gin.Context) {
+	p := Profile{}
+	id := c.Param("id")
+
+	if e := FindById(id, &p); e != nil {
+		c.JSON(http.StatusInternalServerError, e)
+	}
+
+	c.JSON(http.StatusOK, p)
 }

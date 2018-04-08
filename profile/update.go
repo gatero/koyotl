@@ -1,30 +1,24 @@
 package profile
 
 import (
-	"app/db"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func RH_Update(c *gin.Context) {
-	session, _ := db.Mongo()
-	defer session.Close()
+func RH_Update(ctx *gin.Context) {
+	c, _ := Collection()
+	p := Profile{
+		FirstName: ctx.PostForm("firstName"),
+		LastName:  ctx.PostForm("lastName"),
+		Birthday:  ctx.PostForm("birthday"),
+	}
+	id := bson.M{"_id": bson.ObjectIdHex(ctx.Param("id"))}
 
-	p := session.DB(MONGO_DATABASE).C(COLLECTION)
-	id := bson.M{"_id": bson.ObjectIdHex(c.Param("id"))}
-
-	profile := Profile{
-		FirstName: c.PostForm("firstName"),
-		LastName:  c.PostForm("lastName"),
-		Birthday:  c.PostForm("birthday"),
+	if e := c.Update(id, &p); e != nil {
+		ctx.JSON(http.StatusInternalServerError, e)
 	}
 
-	err := p.Update(id, &profile)
-	if err != nil {
-		panic(err)
-	}
-
-	c.JSON(http.StatusOK, profile)
+	ctx.JSON(http.StatusOK, p)
 }
