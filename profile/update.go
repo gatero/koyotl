@@ -12,7 +12,7 @@ func Update(id string, update map[string]interface{}) error {
 	var selector map[string]interface{}
 
 	selector["_id"] = bson.ObjectIdHex(id)
-	if e := c.Update(selector, update); e != nil {
+	if e := c.Upsert(selector, update); e != nil {
 		return e
 	}
 	return nil
