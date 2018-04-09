@@ -7,18 +7,24 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func RH_Update(ctx *gin.Context) {
+func Update(id string, update map[string]interface{}) error {
 	c, _ := Collection()
-	p := Profile{
-		FirstName: ctx.PostForm("firstName"),
-		LastName:  ctx.PostForm("lastName"),
-		Birthday:  ctx.PostForm("birthday"),
-	}
-	id := bson.M{"_id": bson.ObjectIdHex(ctx.Param("id"))}
+	var selector map[string]interface{}
 
-	if e := c.Update(id, &p); e != nil {
-		ctx.JSON(http.StatusInternalServerError, e)
+	selector["_id"] = bson.ObjectIdHex(id)
+	if e := c.Update(selector, update); e != nil {
+		return e
+	}
+	return nil
+}
+
+func RH_Update(c *gin.Context) {
+	var update map[string]interface{}
+	c.ShouldBindJSON(&update)
+
+	if e := Update(c.Param("id"), update); e != nil {
+		c.JSON(http.StatusInternalServerError, e)
 	}
 
-	ctx.JSON(http.StatusOK, p)
+	c.JSON(http.StatusOK, update)
 }

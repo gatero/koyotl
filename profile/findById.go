@@ -1,29 +1,39 @@
 package profile
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func FindById(id string, p *Profile) error {
+var NoIdError string = "No id present in the request"
+
+// TODO: validate the object index
+func FindById(id string) (Profile, error) {
+	var p Profile
 	c, _ := Collection()
 	query := bson.M{"_id": bson.ObjectIdHex(id)}
 
-	if e := c.Find(query).One(&p); e != nil {
-		return e
+	if len(id) == 0 {
+		return p, errors.New(NoIdError)
 	}
 
-	return nil
+	if e := c.Find(query).One(&p); e != nil {
+		return p, e
+	}
+
+	return p, nil
 }
 
 func RH_FindById(c *gin.Context) {
-	p := Profile{}
-	id := c.Param("id")
-
-	if e := FindById(id, &p); e != nil {
-		c.JSON(http.StatusInternalServerError, e)
+	p, e := FindById(c.Param("id"))
+	if e != nil {
+		if e.Error() == NoIdError {
+			c.JSON(http.StatusBadRequest, e)
+		}
+		c.JSON(http.StatusNotFound, e)
 	}
 
 	c.JSON(http.StatusOK, p)
