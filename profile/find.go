@@ -15,6 +15,10 @@ func Find(query map[string]interface{}) ([]Profile, error) {
 	var p []Profile
 	// try to find all the profiles
 	// and store them into the profiles slice
+	if len(query) == 0 {
+		query = nil
+	}
+
 	if e := c.Find(query).All(&p); e != nil {
 		// if an error is ocurred then the
 		// return the corresponding error
@@ -26,7 +30,7 @@ func Find(query map[string]interface{}) ([]Profile, error) {
 // RH_Find is the route HandlerFunc for find
 func RH_Find(c *gin.Context) {
 	var query map[string]interface{}
-	c.BindJSON(&query)
+	c.ShouldBindJSON(&query)
 	// try to find all the profiles
 	// and store them into the profiles slice
 	p, e := Find(query)
