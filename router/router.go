@@ -19,7 +19,7 @@ func init() {
 	router.POST("/profile", profile.RH_Create)
 	router.GET("/profile", profile.RH_Find)
 	router.GET("/profile/:id", profile.RH_FindById)
-	router.PUT("/profile/:id", profile.RH_Update)
+	router.PATCH("/profile/:id", profile.RH_Upsert)
 	router.DELETE("/profile/:id", profile.RH_DeleteById)
 
 	//: Run router

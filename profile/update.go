@@ -7,7 +7,7 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func Update(id string, update map[string]interface{}) error {
+func Upsert(id string, update map[string]interface{}) error {
 	c, _ := Collection()
 	var selector map[string]interface{}
 
@@ -18,11 +18,11 @@ func Update(id string, update map[string]interface{}) error {
 	return nil
 }
 
-func RH_Update(c *gin.Context) {
+func RH_Upsert(c *gin.Context) {
 	var update map[string]interface{}
 	c.ShouldBindJSON(&update)
 
-	if e := Update(c.Param("id"), update); e != nil {
+	if e := Upsert(c.Param("id"), update); e != nil {
 		c.JSON(http.StatusInternalServerError, e)
 	}
 

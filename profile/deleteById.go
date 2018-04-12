@@ -12,7 +12,7 @@ func RH_DeleteById(c *gin.Context) {
 	var update map[string]interface{}
 	update["status"] = STATUS_DELETED
 
-	if e := Update(c.Param("id"), update); e != nil {
+	if e := Upsert(c.Param("id"), update); e != nil {
 		c.JSON(http.StatusInternalServerError, e)
 	}
 
