@@ -9,12 +9,14 @@ import (
 	bson "gopkg.in/mgo.v2/bson"
 )
 
-func Upsert(id string, update map[string]interface{}) (*mgo.ChangeInfo, error) {
+func Upsert(id string, upsert interface{}) (*mgo.ChangeInfo, error) {
 	c, _ := Collection()
-	var selector map[string]interface{}
 
-	selector["_id"] = bson.ObjectIdHex(id)
-	i, e := c.Upsert(selector, update)
+	selector := bson.M{
+		"_id": bson.ObjectIdHex(id),
+	}
+
+	i, e := c.Upsert(selector, upsert)
 	if e != nil {
 		return nil, e
 	}
@@ -22,11 +24,11 @@ func Upsert(id string, update map[string]interface{}) (*mgo.ChangeInfo, error) {
 }
 
 func RH_Upsert(c *gin.Context) {
-	var update map[string]interface{}
-	c.ShouldBindJSON(&update)
-	fmt.Printf("\n\n UPSERT %s\n\n", update)
+	var upsert map[string]interface{}
+	c.ShouldBindJSON(&upsert)
+	fmt.Printf("\n\n UPSERT %s\n\n", upsert)
 
-	i, e := Upsert(c.Param("id"), update)
+	i, e := Upsert(c.Param("id"), upsert)
 	if e != nil {
 		c.JSON(http.StatusInternalServerError, e)
 	}
