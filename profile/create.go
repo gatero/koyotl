@@ -1,6 +1,8 @@
 package profile
 
 import (
+	pb "app/grpc"
+
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -8,18 +10,15 @@ import (
 
 // Create is a ethod to create user instances
 // it recives a struct of Profile type
-func (a *Action) Create(p *Profile) (*Profile, error) {
+func Create(p *pb.Profile) error {
 	// get the collection pointer
 	c, _ := Collection()
 
 	// try to Insert the profile instance
 	if e := c.Insert(p); e != nil {
-		// return error
-		return nil, e
+		return e
 	}
-
-	// return profile instance
-	return p, nil
+	return nil
 }
 
 func (rpc *RPC) Create(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {

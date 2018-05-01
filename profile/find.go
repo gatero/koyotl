@@ -1,45 +1,34 @@
 package profile
 
 import (
-	"net/http"
+	pb "app/grpc"
 
-	"github.com/gin-gonic/gin"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 )
 
 // Find method get all the user instances
 // that exist into the database
-func Find(query map[string]interface{}) ([]Profile, error) {
+func Find(query *pb.Profile, p []*pb.Profile) error {
 	// get the collection pointer
 	c, _ := Collection()
-	// declare and empty array
-	var p []Profile
-	// try to find all the profiles
-	// and store them into the profiles slice
-	if len(query) == 0 {
-		query = nil
-	}
 
-	if e := c.Find(query).All(&p); e != nil {
+	if e := c.Find(query).All(p); e != nil {
 		// if an error is ocurred then the
 		// return the corresponding error
-		return nil, e
+		return e
 	}
-	return p, nil
+
+	return nil
 }
 
-// RH_Find is the route HandlerFunc for find
-func RH_Find(c *gin.Context) {
-	var query map[string]interface{}
-	c.ShouldBindJSON(&query)
-	// try to find all the profiles
-	// and store them into the profiles slice
-	p, e := Find(query)
+func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) ([]*pb.Profile, error) {
+	var profiles []*pb.Profile
 
-	if e != nil {
-		// if an error is ocurred then the
-		// return the corresponding error
-		c.String(http.StatusInternalServerError, e.Error())
+	if e := Find(p, profiles); e != nil {
+		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
-	// return the query results
-	c.JSON(http.StatusOK, p)
+
+	return profiles, nil
 }

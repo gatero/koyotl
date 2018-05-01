@@ -1,10 +1,9 @@
 package profile
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	mgo "gopkg.in/mgo.v2"
 	bson "gopkg.in/mgo.v2/bson"
 )
@@ -23,15 +22,10 @@ func Upsert(id string, upsert interface{}) (*mgo.ChangeInfo, error) {
 	return i, nil
 }
 
-func RH_Upsert(c *gin.Context) {
-	var upsert map[string]interface{}
-	c.ShouldBindJSON(&upsert)
-	fmt.Printf("\n\n UPSERT %s\n\n", upsert)
-
-	i, e := Upsert(c.Param("id"), upsert)
-	if e != nil {
-		c.JSON(http.StatusInternalServerError, e)
+func (rpc *RPC) Upsert(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {
+	if e := Upsert(p.Id, p); e != nil {
+		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
-	c.JSON(http.StatusOK, i)
+	return p, nil
 }
