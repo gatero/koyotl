@@ -9,15 +9,15 @@ import (
 )
 
 type Profile struct {
-	Id         bson.ObjectId `form:"id" json:"id,omitempty" bson:"_id,omitempty"`
-	FirebaseId string        `form:"firebaseid" json:"firebaseid,omitempty" bson:"firebaseid"`
-	FirstName  string        `form:"firstname" json:"firstname,omitempty" bson:"firstname"`
-	LastName   string        `form:"lastname" json:"lastname,omitempty" bson:"lastname"`
-	Name       string        `form:"name,omitempty" json:"name,omitempty" bson:"name" `
-	Email      string        `form:"email,omitempty" json:"email,omitempty" bson:"email`
-	Birthday   string        `form:"birthday" json:"birthday,omitempty" bson:"birthday"`
-	Status     string        `form:"status" json:"status,omitempty" bson:"status"`
-	Role       string        `form:"role" json:"role,omitempty" bson:"role"`
+	Id         bson.ObjectId `bson:"_id,omitempty"`
+	FirebaseId string
+	FirstName  string
+	LastName   string
+	Name       string
+	Email      string
+	Birthday   string
+	Status     string
+	Role       string
 }
 
 var MONGO_DATABASE string
@@ -37,3 +37,7 @@ func Collection() (*mgo.Collection, error) {
 
 	return s.DB(MONGO_DATABASE).C(COLLECTION), nil
 }
+
+type Action struct{}
+
+type RPC struct{}
