@@ -1,6 +1,8 @@
 package profile
 
 import (
+	pb "app/grpc"
+
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -22,10 +24,11 @@ func Upsert(id string, upsert interface{}) (*mgo.ChangeInfo, error) {
 	return i, nil
 }
 
-func (rpc *RPC) Upsert(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {
-	if e := Upsert(p.Id, p); e != nil {
+func (rpc *RPC) Upsert(ctx context.Context, p *pb.Profile) (*mgo.ChangeInfo, error) {
+	i, e := Upsert(p.Id, p)
+	if e != nil {
 		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
-	return p, nil
+	return i, nil
 }

@@ -10,7 +10,7 @@ service ProfileService {
 }
 
 message Profile {
-  uint32 id = 1;
+  string id = 1;
   string firebaseId = 2;
   string name = 3;
   string alias = 4;
