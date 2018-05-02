@@ -2,10 +2,6 @@ package profile
 
 import (
 	pb "app/grpc"
-
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 )
 
 // Find method get all the user instances
@@ -23,12 +19,12 @@ func Find(query *pb.Profile, p []*pb.Profile) error {
 	return nil
 }
 
-func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) ([]*pb.Profile, error) {
-	var profiles []*pb.Profile
+//func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) ([]*pb.Profile, error) {
+//var profiles []*pb.Profile
 
-	if e := Find(p, profiles); e != nil {
-		return nil, grpc.Errorf(codes.Internal, e.Error())
-	}
+//if e := Find(p, profiles); e != nil {
+//return nil, grpc.Errorf(codes.Internal, e.Error())
+//}
 
-	return profiles, nil
-}
+//return profiles, nil
+//}

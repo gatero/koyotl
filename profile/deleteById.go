@@ -19,3 +19,11 @@ func RH_DeleteById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, i)
 }
+
+//func (rpc *RPC) FindById(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {
+//return nil, grpc.Errorf(codes.Internal, "hola")
+//}
+
+//func (rpc *RPC) DeleteById(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {
+//return nil, grpc.Errorf(codes.Internal, "hola")
+//}

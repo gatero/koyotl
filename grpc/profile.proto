@@ -3,10 +3,10 @@ package grpc;
 
 service ProfileService {
   rpc Create(Profile) returns (Profile) {}
-  rpc Update(Profile) returns (Profile) {}
-  rpc Find(Profile) returns (Profiles) {}
-  rpc FindById(Profile) returns (Profile) {}
-  rpc DeleteById(Profile) returns (Profile) {}
+  /*rpc Update(Profile) returns (Profile) {}*/
+  /*rpc Find(Profile) returns (Profiles) {}*/
+  /*rpc FindById(Profile) returns (Profile) {}*/
+  /*rpc DeleteById(Profile) returns (Profile) {}*/
 }
 
 message Profile {

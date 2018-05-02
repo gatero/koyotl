@@ -1,6 +1,7 @@
 package profile
 
 import (
+	pb "app/grpc"
 	"fmt"
 
 	"firebase.google.com/go/auth"
@@ -10,7 +11,7 @@ import (
 func VerifyProfile(t *auth.Token) {
 	c, _ := Collection()
 
-	p := Profile{
+	p := pb.Profile{
 		FirebaseId: t.UID,
 		Name:       t.Claims["name"].(string),
 		Email:      t.Claims["email"].(string),
@@ -29,7 +30,7 @@ func VerifyProfile(t *auth.Token) {
 		return
 	}
 
-	if _, e := Create(&p); e == nil {
+	if e := Create(&p); e == nil {
 		fmt.Printf("New profile was created: %s", p)
 	}
 
