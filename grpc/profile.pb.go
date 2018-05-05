@@ -34,7 +34,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Profile struct {
-	Id         string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Id         string `protobuf:"bytes,1,opt,name=id" json:"_id,omitempty" bson:"_id,omitempty"`
 	FirebaseId string `protobuf:"bytes,2,opt,name=firebaseId" json:"firebaseId,omitempty"`
 	Name       string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
 	Alias      string `protobuf:"bytes,4,opt,name=alias" json:"alias,omitempty"`

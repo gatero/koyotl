@@ -2,6 +2,7 @@ package profile
 
 import (
 	pb "app/grpc"
+	"log"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -26,5 +27,6 @@ func (rpc *RPC) Create(ctx context.Context, p *pb.Profile) (*pb.Profile, error) 
 		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
+	log.Printf("profile: %v", p)
 	return p, nil
 }
