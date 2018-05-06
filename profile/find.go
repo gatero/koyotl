@@ -23,6 +23,6 @@ import (
 //return nil
 //}
 
-func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) ([]*pb.Profile, error) {
-	return []*pb.Profile{}, grpc.Errorf(codes.Internal, "hola")
+func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) (*pb.Profiles, error) {
+	return &pb.Profiles{}, grpc.Errorf(codes.Internal, "hola")
 }
