@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 
@@ -17,7 +16,6 @@ import (
 
 func Update(id string, p *pb.Profile) error {
 	c, _ := Collection()
-	log.Printf("\n\n UPDATE: %v \n\n", p)
 
 	selector := bson.M{
 		"_id": bson.ObjectIdHex(id),
