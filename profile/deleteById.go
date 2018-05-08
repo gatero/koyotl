@@ -16,7 +16,7 @@ func DeleteById(id string) {
 func (rpc *RPC) DeleteById(ctx context.Context, p *pb.DeleteProfile) (*pb.Profile, error) {
 	profile := &pb.Profile{Status: STATUS_DELETED}
 	if e := Update(p.Id, profile); e != nil {
-		return &pb.Profile{}, grpc.Errorf(codes.Internal, e.Error())
+		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
 	return profile, nil
