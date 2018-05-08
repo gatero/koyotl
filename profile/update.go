@@ -2,6 +2,7 @@ package profile
 
 import (
 	pb "app/grpc"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -22,24 +23,32 @@ func Update(id string, p *pb.Profile) error {
 		"_id": bson.ObjectIdHex(id),
 	}
 
+	var profile map[string]interface{}
+	inrec, _ := json.Marshal(p)
+	json.Unmarshal(inrec, &profile)
+
 	var result map[string]interface{}
 	if e := c.Find(selector).One(&result); e != nil {
 		return e
 	}
-	profile, e := FillProfile(result, p)
+
+	for k, v := range profile {
+		result[k] = v
+	}
+
+	updated, e := FillStruct(result, &pb.Profile{})
 	if e != nil {
 		return e
 	}
-	log.Printf("PROFILE: %v\n\n", profile)
 
-	if e := c.Update(selector, &p); e != nil {
+	if e := c.Update(selector, &updated); e != nil {
 		return e
 	}
 
 	return nil
 }
 
-func FillProfile(input map[string]interface{}, output *pb.Profile) (pb.Profile, error) {
+func FillStruct(input map[string]interface{}, output interface{}) (interface{}, error) {
 	structValue := reflect.ValueOf(output).Elem()
 	for k, v := range input {
 		if strings.Title(k) != "_id" {
@@ -61,10 +70,7 @@ func FillProfile(input map[string]interface{}, output *pb.Profile) (pb.Profile, 
 			structField.Set(val)
 		}
 	}
-	log.Printf("structValue: %v\n\n", reflect.Indirect(structValue))
-	profile := reflect.Indirect(structValue)
-	log.Printf("PROFILE: %T\n\n", profile)
-	return pb.Profile{}, nil
+	return structValue.Interface(), nil
 }
 
 func (rpc *RPC) Update(ctx context.Context, p *pb.UpdateProfile) (*pb.Profile, error) {
