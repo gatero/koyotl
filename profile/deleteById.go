@@ -13,6 +13,6 @@ import (
 func DeleteById(id string) {
 }
 
-func (rpc *RPC) DeleteById(ctx context.Context, p *pb.Profile) (*pb.Profile, error) {
-	return nil, grpc.Errorf(codes.Internal, "hola")
+func (rpc *RPC) DeleteById(ctx context.Context, p *pb.DeleteProfile) (*pb.Profile, error) {
+	return &pb.Profile{}, grpc.Errorf(codes.Internal, "hola")
 }

@@ -9,6 +9,8 @@ It is generated from these files:
 
 It has these top-level messages:
 	Profile
+	UpdateProfile
+	DeleteProfile
 	Profiles
 */
 package grpc
@@ -34,29 +36,21 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Profile struct {
-	Id         string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	FirebaseId string `protobuf:"bytes,2,opt,name=firebaseId" json:"firebaseId,omitempty"`
-	Name       string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
-	Alias      string `protobuf:"bytes,4,opt,name=alias" json:"alias,omitempty"`
-	Username   string `protobuf:"bytes,5,opt,name=username" json:"username,omitempty"`
-	Lastname   string `protobuf:"bytes,6,opt,name=lastname" json:"lastname,omitempty"`
-	Email      string `protobuf:"bytes,7,opt,name=email" json:"email,omitempty"`
-	Birthday   string `protobuf:"bytes,8,opt,name=birthday" json:"birthday,omitempty"`
-	Status     string `protobuf:"bytes,9,opt,name=status" json:"status,omitempty"`
-	Role       string `protobuf:"bytes,10,opt,name=role" json:"role,omitempty"`
+	FirebaseId string `protobuf:"bytes,2,opt,name=firebaseId" bson:"FirebaseId,omitempty"`
+	Name       string `protobuf:"bytes,3,opt,name=name" bson:"Name,omitempty"`
+	Alias      string `protobuf:"bytes,4,opt,name=alias" bson:"Alias,omitempty"`
+	Username   string `protobuf:"bytes,5,opt,name=username" bson:"Username,omitempty"`
+	Lastname   string `protobuf:"bytes,6,opt,name=lastname" bson:"Lastname,omitempty"`
+	Email      string `protobuf:"bytes,7,opt,name=email" bson:"Email,omitempty"`
+	Birthday   string `protobuf:"bytes,8,opt,name=birthday" bson:"Birthday,omitempty"`
+	Status     string `protobuf:"bytes,9,opt,name=status" bson:"Status,omitempty"`
+	Role       string `protobuf:"bytes,10,opt,name=role" bson:"Role,omitempty"`
 }
 
 func (m *Profile) Reset()                    { *m = Profile{} }
 func (m *Profile) String() string            { return proto.CompactTextString(m) }
 func (*Profile) ProtoMessage()               {}
 func (*Profile) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
-
-func (m *Profile) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
 
 func (m *Profile) GetFirebaseId() string {
 	if m != nil {
@@ -121,6 +115,46 @@ func (m *Profile) GetRole() string {
 	return ""
 }
 
+type UpdateProfile struct {
+	Id      string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Profile *Profile `protobuf:"bytes,2,opt,name=profile" json:"profile,omitempty"`
+}
+
+func (m *UpdateProfile) Reset()                    { *m = UpdateProfile{} }
+func (m *UpdateProfile) String() string            { return proto.CompactTextString(m) }
+func (*UpdateProfile) ProtoMessage()               {}
+func (*UpdateProfile) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+
+func (m *UpdateProfile) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *UpdateProfile) GetProfile() *Profile {
+	if m != nil {
+		return m.Profile
+	}
+	return nil
+}
+
+type DeleteProfile struct {
+	Id string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+}
+
+func (m *DeleteProfile) Reset()                    { *m = DeleteProfile{} }
+func (m *DeleteProfile) String() string            { return proto.CompactTextString(m) }
+func (*DeleteProfile) ProtoMessage()               {}
+func (*DeleteProfile) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *DeleteProfile) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
 type Profiles struct {
 	Offset   int32      `protobuf:"varint,1,opt,name=offset" json:"offset,omitempty"`
 	Limit    int32      `protobuf:"varint,2,opt,name=limit" json:"limit,omitempty"`
@@ -132,7 +166,7 @@ type Profiles struct {
 func (m *Profiles) Reset()                    { *m = Profiles{} }
 func (m *Profiles) String() string            { return proto.CompactTextString(m) }
 func (*Profiles) ProtoMessage()               {}
-func (*Profiles) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
+func (*Profiles) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 func (m *Profiles) GetOffset() int32 {
 	if m != nil {
@@ -171,6 +205,8 @@ func (m *Profiles) GetProfiles() []*Profile {
 
 func init() {
 	proto.RegisterType((*Profile)(nil), "grpc.Profile")
+	proto.RegisterType((*UpdateProfile)(nil), "grpc.UpdateProfile")
+	proto.RegisterType((*DeleteProfile)(nil), "grpc.DeleteProfile")
 	proto.RegisterType((*Profiles)(nil), "grpc.Profiles")
 }
 
@@ -186,9 +222,9 @@ const _ = grpc1.SupportPackageIsVersion4
 
 type ProfileServiceClient interface {
 	Create(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profile, error)
-	Upsert(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profile, error)
 	Find(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profiles, error)
-	DeleteById(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profile, error)
+	Update(ctx context.Context, in *UpdateProfile, opts ...grpc1.CallOption) (*Profile, error)
+	DeleteById(ctx context.Context, in *DeleteProfile, opts ...grpc1.CallOption) (*Profile, error)
 }
 
 type profileServiceClient struct {
@@ -208,15 +244,6 @@ func (c *profileServiceClient) Create(ctx context.Context, in *Profile, opts ...
 	return out, nil
 }
 
-func (c *profileServiceClient) Upsert(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profile, error) {
-	out := new(Profile)
-	err := grpc1.Invoke(ctx, "/grpc.ProfileService/Upsert", in, out, c.cc, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *profileServiceClient) Find(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profiles, error) {
 	out := new(Profiles)
 	err := grpc1.Invoke(ctx, "/grpc.ProfileService/Find", in, out, c.cc, opts...)
@@ -226,7 +253,16 @@ func (c *profileServiceClient) Find(ctx context.Context, in *Profile, opts ...gr
 	return out, nil
 }
 
-func (c *profileServiceClient) DeleteById(ctx context.Context, in *Profile, opts ...grpc1.CallOption) (*Profile, error) {
+func (c *profileServiceClient) Update(ctx context.Context, in *UpdateProfile, opts ...grpc1.CallOption) (*Profile, error) {
+	out := new(Profile)
+	err := grpc1.Invoke(ctx, "/grpc.ProfileService/Update", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileServiceClient) DeleteById(ctx context.Context, in *DeleteProfile, opts ...grpc1.CallOption) (*Profile, error) {
 	out := new(Profile)
 	err := grpc1.Invoke(ctx, "/grpc.ProfileService/DeleteById", in, out, c.cc, opts...)
 	if err != nil {
@@ -239,9 +275,9 @@ func (c *profileServiceClient) DeleteById(ctx context.Context, in *Profile, opts
 
 type ProfileServiceServer interface {
 	Create(context.Context, *Profile) (*Profile, error)
-	Upsert(context.Context, *Profile) (*Profile, error)
 	Find(context.Context, *Profile) (*Profiles, error)
-	DeleteById(context.Context, *Profile) (*Profile, error)
+	Update(context.Context, *UpdateProfile) (*Profile, error)
+	DeleteById(context.Context, *DeleteProfile) (*Profile, error)
 }
 
 func RegisterProfileServiceServer(s *grpc1.Server, srv ProfileServiceServer) {
@@ -266,24 +302,6 @@ func _ProfileService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProfileService_Upsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc1.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Profile)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProfileServiceServer).Upsert(ctx, in)
-	}
-	info := &grpc1.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/grpc.ProfileService/Upsert",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServiceServer).Upsert(ctx, req.(*Profile))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ProfileService_Find_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc1.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Profile)
 	if err := dec(in); err != nil {
@@ -302,8 +320,26 @@ func _ProfileService_Find_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProfileService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc1.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProfile)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).Update(ctx, in)
+	}
+	info := &grpc1.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/grpc.ProfileService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).Update(ctx, req.(*UpdateProfile))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProfileService_DeleteById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc1.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Profile)
+	in := new(DeleteProfile)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -315,7 +351,7 @@ func _ProfileService_DeleteById_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/grpc.ProfileService/DeleteById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServiceServer).DeleteById(ctx, req.(*Profile))
+		return srv.(ProfileServiceServer).DeleteById(ctx, req.(*DeleteProfile))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -329,12 +365,12 @@ var _ProfileService_serviceDesc = grpc1.ServiceDesc{
 			Handler:    _ProfileService_Create_Handler,
 		},
 		{
-			MethodName: "Upsert",
-			Handler:    _ProfileService_Upsert_Handler,
-		},
-		{
 			MethodName: "Find",
 			Handler:    _ProfileService_Find_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _ProfileService_Update_Handler,
 		},
 		{
 			MethodName: "DeleteById",
@@ -348,26 +384,29 @@ var _ProfileService_serviceDesc = grpc1.ServiceDesc{
 func init() { proto.RegisterFile("profile.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 336 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x41, 0x6e, 0xf2, 0x30,
-	0x10, 0x85, 0x09, 0xc4, 0x21, 0xcc, 0x2f, 0x58, 0x58, 0xbf, 0x2a, 0x8b, 0x45, 0x85, 0xb2, 0x29,
-	0x95, 0x2a, 0x16, 0xf4, 0x06, 0x6d, 0x55, 0x89, 0x5d, 0x95, 0xaa, 0x07, 0x30, 0x64, 0x42, 0x2d,
-	0x19, 0x12, 0xd9, 0xa6, 0x12, 0x87, 0xe8, 0x89, 0x7a, 0xb2, 0xee, 0x2a, 0x8f, 0x0d, 0x6a, 0xba,
-	0x61, 0xe7, 0xef, 0xbd, 0x37, 0x93, 0x99, 0x51, 0x60, 0xdc, 0x9a, 0xa6, 0x56, 0x1a, 0x17, 0xad,
-	0x69, 0x5c, 0xc3, 0xd3, 0xad, 0x69, 0x37, 0xc5, 0x77, 0x02, 0xc3, 0x97, 0xa0, 0xf3, 0x09, 0xf4,
-	0x55, 0x25, 0x92, 0x59, 0x32, 0x1f, 0x95, 0x7d, 0x55, 0xf1, 0x6b, 0x80, 0x5a, 0x19, 0x5c, 0x4b,
-	0x8b, 0xab, 0x4a, 0xf4, 0x49, 0xff, 0xa5, 0x70, 0x0e, 0xe9, 0x5e, 0xee, 0x50, 0x0c, 0xc8, 0xa1,
-	0x37, 0xff, 0x0f, 0x4c, 0x6a, 0x25, 0xad, 0x48, 0x49, 0x0c, 0xc0, 0xa7, 0x90, 0x1f, 0x2c, 0x1a,
-	0x4a, 0x33, 0x32, 0xce, 0xec, 0x3d, 0x2d, 0xad, 0x23, 0x2f, 0x0b, 0xde, 0x89, 0x7d, 0x37, 0xdc,
-	0x49, 0xa5, 0xc5, 0x30, 0x74, 0x23, 0xf0, 0x15, 0x6b, 0x65, 0xdc, 0x7b, 0x25, 0x8f, 0x22, 0x0f,
-	0x15, 0x27, 0xe6, 0x57, 0x90, 0x59, 0x27, 0xdd, 0xc1, 0x8a, 0x11, 0x39, 0x91, 0xfc, 0xac, 0xa6,
-	0xd1, 0x28, 0x20, 0xcc, 0xea, 0xdf, 0xc5, 0x67, 0x02, 0x79, 0xdc, 0xdd, 0xfa, 0xc2, 0xa6, 0xae,
-	0x2d, 0x3a, 0x3a, 0x00, 0x2b, 0x23, 0xf9, 0x11, 0xb4, 0xda, 0x29, 0x47, 0xfb, 0xb3, 0x32, 0x80,
-	0x6f, 0xd7, 0xca, 0x6d, 0x58, 0x9d, 0x95, 0xf4, 0xf6, 0xc9, 0x4d, 0x73, 0xd8, 0x3b, 0x5a, 0x9d,
-	0x95, 0x01, 0xf8, 0x2d, 0xe4, 0xf1, 0xee, 0x56, 0xb0, 0xd9, 0x60, 0xfe, 0x6f, 0x39, 0x5e, 0xf8,
-	0xcb, 0x2f, 0xe2, 0x97, 0xcb, 0xb3, 0xbd, 0xfc, 0x4a, 0x60, 0x12, 0xd5, 0x57, 0x34, 0x1f, 0x6a,
-	0x83, 0x7c, 0x0e, 0xd9, 0xa3, 0x41, 0xe9, 0x90, 0x77, 0xab, 0xa6, 0x5d, 0x2c, 0x7a, 0x3e, 0xf9,
-	0xd6, 0x5a, 0x34, 0xee, 0x62, 0xf2, 0x06, 0xd2, 0x67, 0xb5, 0xaf, 0xfe, 0xe6, 0x26, 0x1d, 0xb4,
-	0x45, 0x8f, 0xdf, 0x01, 0x3c, 0xa1, 0x46, 0x87, 0x0f, 0xc7, 0x55, 0x75, 0xa9, 0xed, 0x3a, 0xa3,
-	0xdf, 0xea, 0xfe, 0x27, 0x00, 0x00, 0xff, 0xff, 0x1c, 0xbb, 0xbf, 0xb5, 0x67, 0x02, 0x00, 0x00,
+	// 370 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0x41, 0x6e, 0xea, 0x30,
+	0x10, 0x86, 0x09, 0x24, 0x21, 0xcc, 0x53, 0x58, 0xf8, 0x3d, 0x3d, 0x59, 0x2c, 0xde, 0x43, 0xd9,
+	0x40, 0x37, 0x59, 0xd0, 0x1b, 0xb4, 0x55, 0x55, 0x76, 0x55, 0xaa, 0x1e, 0xc0, 0x90, 0x09, 0xb5,
+	0x14, 0x48, 0x64, 0x9b, 0x4a, 0x1c, 0xa2, 0xe7, 0xea, 0x59, 0x7a, 0x8b, 0xca, 0x63, 0x07, 0x35,
+	0x45, 0xdd, 0xf9, 0x9b, 0x7f, 0x66, 0xf2, 0xcf, 0xaf, 0x40, 0xda, 0xaa, 0xa6, 0x92, 0x35, 0xe6,
+	0xad, 0x6a, 0x4c, 0xc3, 0xc2, 0x9d, 0x6a, 0xb7, 0xd9, 0x47, 0x00, 0xe3, 0x47, 0x57, 0x67, 0xff,
+	0x00, 0x2a, 0xa9, 0x70, 0x23, 0x34, 0xae, 0x4b, 0x3e, 0x9c, 0x07, 0xcb, 0x49, 0xf1, 0xa5, 0xc2,
+	0x18, 0x84, 0x07, 0xb1, 0x47, 0x3e, 0x22, 0x85, 0xde, 0xec, 0x0f, 0x44, 0xa2, 0x96, 0x42, 0xf3,
+	0x90, 0x8a, 0x0e, 0xd8, 0x0c, 0x92, 0xa3, 0x46, 0x45, 0xdd, 0x11, 0x09, 0x67, 0xb6, 0x5a, 0x2d,
+	0xb4, 0x21, 0x2d, 0x76, 0x5a, 0xc7, 0x76, 0x1b, 0xee, 0x85, 0xac, 0xf9, 0xd8, 0x6d, 0x23, 0xb0,
+	0x13, 0x1b, 0xa9, 0xcc, 0x4b, 0x29, 0x4e, 0x3c, 0x71, 0x13, 0x1d, 0xb3, 0xbf, 0x10, 0x6b, 0x23,
+	0xcc, 0x51, 0xf3, 0x09, 0x29, 0x9e, 0xac, 0x57, 0xd5, 0xd4, 0xc8, 0xc1, 0x79, 0xb5, 0xef, 0xec,
+	0x01, 0xd2, 0xe7, 0xb6, 0x14, 0x06, 0xbb, 0x83, 0xa7, 0x30, 0x94, 0x25, 0x0f, 0xa8, 0x65, 0x28,
+	0x4b, 0xb6, 0x80, 0xb1, 0xcf, 0x88, 0xae, 0xff, 0xb5, 0x4a, 0x73, 0x1b, 0x52, 0xee, 0xfb, 0x8b,
+	0x4e, 0xcd, 0xfe, 0x43, 0x7a, 0x87, 0x35, 0xfe, 0xb8, 0x29, 0x7b, 0x0b, 0x20, 0xf1, 0x9a, 0xb6,
+	0x1e, 0x9b, 0xaa, 0xd2, 0x68, 0xa8, 0x21, 0x2a, 0x3c, 0xd9, 0x6b, 0x6b, 0xb9, 0x97, 0x86, 0x3e,
+	0x16, 0x15, 0x0e, 0xac, 0xf3, 0x56, 0xec, 0x5c, 0xca, 0x51, 0x41, 0x6f, 0xdb, 0xb9, 0x6d, 0x8e,
+	0x07, 0x43, 0x29, 0x47, 0x85, 0x03, 0x76, 0x05, 0x89, 0x37, 0xa4, 0x79, 0x34, 0x1f, 0x5d, 0xfa,
+	0x3d, 0xcb, 0xab, 0xf7, 0x00, 0xa6, 0xbe, 0xfa, 0x84, 0xea, 0x55, 0x6e, 0x91, 0x2d, 0x21, 0xbe,
+	0x55, 0x28, 0x0c, 0xb2, 0xfe, 0xd4, 0xac, 0x8f, 0xd9, 0x80, 0x2d, 0x20, 0xbc, 0x97, 0x87, 0xf2,
+	0x7b, 0xdf, 0xb4, 0x87, 0x3a, 0x1b, 0xb0, 0x1c, 0x62, 0x17, 0x30, 0xfb, 0xed, 0xb4, 0x5e, 0xdc,
+	0x97, 0x8b, 0x57, 0x00, 0x2e, 0xc6, 0x9b, 0xd3, 0xba, 0xec, 0x66, 0x7a, 0xc1, 0x5e, 0xcc, 0x6c,
+	0x62, 0xfa, 0x7b, 0xaf, 0x3f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x98, 0x95, 0x5c, 0x23, 0xce, 0x02,
+	0x00, 0x00,
 }

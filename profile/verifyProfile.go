@@ -19,14 +19,14 @@ func VerifyProfile(t *auth.Token) {
 		Role:       ROLE_AUTHOR,
 	}
 
-	r := Profile{}
+	r := pb.Profile{}
 	email := bson.M{"email": p.Email}
 
 	if e := c.Find(email).One(&r); e != nil {
 		fmt.Printf("\n\nVerify Profile ERROR: %s\n\n", e)
 	}
 
-	if (Profile{}) != r {
+	if (pb.Profile{}) != r {
 		return
 	}
 

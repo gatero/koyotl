@@ -3,13 +3,12 @@ package grpc;
 
 service ProfileService {
   rpc Create(Profile) returns (Profile) {}
-  rpc Upsert(Profile) returns (Profile) {}
   rpc Find(Profile) returns (Profiles) {}
-  rpc DeleteById(Profile) returns (Profile) {}
+  rpc Update(UpdateProfile) returns (Profile) {}
+  rpc DeleteById(DeleteProfile) returns (Profile) {}
 }
 
 message Profile {
-  string id = 1;
   string firebaseId = 2;
   string name = 3;
   string alias = 4;
@@ -20,6 +19,16 @@ message Profile {
   string status = 9;
   string role = 10;
 }
+
+message UpdateProfile {
+  string id = 1;
+  Profile profile = 2;
+}
+
+message DeleteProfile {
+  string id = 1;
+}
+
 
 message Profiles {
   int32 offset = 1;

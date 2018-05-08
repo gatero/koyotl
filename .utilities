@@ -1,0 +1,27 @@
+PROFILE_ID="5aef4b371ed719a209652399"
+FIREBASE_ID="5aee5f3a5268d609278ca2b7"
+
+PROFILE="{\
+  \"name\":\"john doe\",
+  \"firebaseId\":\"${FIREBASE_ID}\",
+  \"alias\":\"john doe\",
+  \"username\":\"john doe\",
+  \"lastname\":\"john doe\",
+  \"email\":\"john.doe@gmail.com\",
+  \"birthday\":\"29/03/2018\",
+  \"status\":\"INACTIVE\",
+  \"role\":\"EDITOR\"
+}"
+
+CREATE_PROFILE=${PROFILE}
+
+FIND_PROFILE=${PROFILE}
+
+UPDATE_PROFILE="{
+  \"id\":\"${PROFILE_ID}\",
+  \"profile\":${PROFILE}
+}"
+
+DELETE_PROFILE='{
+  \"id\":\"${PROFILE_ID}\"
+}'

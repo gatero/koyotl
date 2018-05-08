@@ -5,20 +5,7 @@ import (
 	"os"
 
 	mgo "gopkg.in/mgo.v2"
-	bson "gopkg.in/mgo.v2/bson"
 )
-
-type Profile struct {
-	Id         bson.ObjectId `bson:"_id,omitempty"`
-	FirebaseId string
-	FirstName  string
-	LastName   string
-	Name       string
-	Email      string
-	Birthday   string
-	Status     string
-	Role       string
-}
 
 var MONGO_DATABASE string
 var COLLECTION string
