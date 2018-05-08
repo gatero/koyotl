@@ -33,7 +33,9 @@ func Update(id string, p *pb.Profile) error {
 	}
 
 	for k, v := range profile {
-		result[k] = v
+		if v != "" {
+			result[k] = v
+		}
 	}
 
 	updated, e := FillStruct(result, &pb.Profile{})
