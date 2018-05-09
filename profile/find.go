@@ -2,6 +2,7 @@ package profile
 
 import (
 	pb "app/grpc"
+	"encoding/json"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -10,19 +11,41 @@ import (
 
 // Find method get all the user instances
 // that exist into the database
-//func Find(query *pb.Profile, p []*pb.Profile) error {
-//// get the collection pointer
-//c, _ := Collection()
+func Find(query map[string]interface{}) ([]*pb.Profile, error) {
+	// get the collection pointer
+	c, _ := Collection()
+	// declare and empty array
+	var p []*pb.Profile
+	// try to find all the profiles
+	// and store them into the profiles slice
+	if len(query) == 0 {
+		query = nil
+	}
 
-//if e := c.Find(query).All(p); e != nil {
-//// if an error is ocurred then the
-//// return the corresponding error
-//return e
-//}
-
-//return nil
-//}
+	if e := c.Find(query).All(&p); e != nil {
+		// if an error is ocurred then the
+		// return the corresponding error
+		return nil, e
+	}
+	return p, nil
+}
 
 func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) (*pb.Profiles, error) {
-	return &pb.Profiles{}, grpc.Errorf(codes.Internal, "hola")
+	var query map[string]interface{}
+	inrec, _ := json.Marshal(p)
+	json.Unmarshal(inrec, &query)
+
+	var profiles []*pb.Profile
+	profiles, e := Find(query)
+	if e != nil {
+		return nil, grpc.Errorf(codes.Internal, e.Error())
+	}
+
+	return &pb.Profiles{
+		Offset:   10,
+		Limit:    12,
+		Page:     13,
+		Count:    20,
+		Profiles: profiles,
+	}, nil
 }
