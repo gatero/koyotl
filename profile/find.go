@@ -3,6 +3,7 @@ package profile
 import (
 	pb "app/grpc"
 	"encoding/json"
+	"log"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -41,11 +42,11 @@ func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) (*pb.Profiles, error) {
 		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
+	log.Printf("length: %v", len(profiles))
+	count := int32(len(profiles))
+
 	return &pb.Profiles{
-		Offset:   10,
-		Limit:    12,
-		Page:     13,
-		Count:    20,
+		Count:    count,
 		Profiles: profiles,
 	}, nil
 }

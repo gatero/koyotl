@@ -3,7 +3,7 @@ package grpc;
 
 service ProfileService {
   rpc Create(Profile) returns (Profile) {}
-  rpc Find(Profile) returns (Profiles) {}
+  rpc Find(FindProfile) returns (Profiles) {}
   rpc Update(UpdateProfile) returns (Profile) {}
   rpc DeleteById(DeleteProfile) returns (Profile) {}
 }
@@ -29,6 +29,12 @@ message DeleteProfile {
   string id = 1;
 }
 
+message FindProfile {
+  int32 offset = 1;
+  int32 limit = 2;
+  int32 page = 3;
+  Profile profile = 4;
+}
 
 message Profiles {
   int32 offset = 1;

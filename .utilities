@@ -9,7 +9,7 @@ PROFILE="{\
   \"lastname\":\"john doe\",
   \"email\":\"john.doe@gmail.com\",
   \"birthday\":\"29/03/2018\",
-  \"status\":\"INACTIVE\",
+  \"status\":\"DELETED\",
   \"role\":\"EDITOR\"
 }"
 
