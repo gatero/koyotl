@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"app/db"
+	"app/mongo"
 	"os"
 
 	mgo "gopkg.in/mgo.v2"
@@ -16,7 +16,7 @@ func init() {
 }
 
 func Collection() (*mgo.Collection, error) {
-	s, e := db.Mongo()
+	s, e := mongo.Session()
 	if e != nil {
 		return nil, e
 	}

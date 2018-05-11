@@ -33,7 +33,9 @@ message FindProfile {
   int32 offset = 1;
   int32 limit = 2;
   int32 page = 3;
-  Profile profile = 4;
+  string orderBy = 4;
+  string order = 5;
+  Profile query = 6;
 }
 
 message Profiles {

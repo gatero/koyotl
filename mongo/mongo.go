@@ -1,4 +1,4 @@
-package db
+package mongo
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 )
 
 //: MONGO DB
-func Mongo() (*mgo.Session, error) {
+func Session() (*mgo.Session, error) {
 	MONGO_CONNECTION_PARAMS := &mgo.DialInfo{
 		Timeout:  60 * time.Second,
 		Addrs:    []string{os.Getenv("MONGO_CONTAINER")},

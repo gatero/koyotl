@@ -12,7 +12,7 @@ import (
 
 // Find method get all the user instances
 // that exist into the database
-func Find(query map[string]interface{}) ([]*pb.Profile, error) {
+func Find(query map[string]interface{}, options map[string]interface{}) ([]*pb.Profile, error) {
 	// get the collection pointer
 	c, _ := Collection()
 	// declare and empty array
@@ -23,27 +23,54 @@ func Find(query map[string]interface{}) ([]*pb.Profile, error) {
 		query = nil
 	}
 
-	if e := c.Find(query).All(&p); e != nil {
+	offset := int(options["page"].(int32) * options["offset"].(int32))
+	limit := int(options["limit"].(int32))
+
+	log.Printf("\n\n QUERY: %v\n\n", query)
+	if e := c.Find(query).Sort("name").Skip(offset).Limit(limit).All(&p); e != nil {
 		// if an error is ocurred then the
 		// return the corresponding error
 		return nil, e
 	}
+
 	return p, nil
 }
 
-func (rpc *RPC) Find(ctx context.Context, p *pb.Profile) (*pb.Profiles, error) {
+func (rpc *RPC) Find(ctx context.Context, p *pb.FindProfile) (*pb.Profiles, error) {
+	options := map[string]interface{}{
+		"offset": int32(0),
+		"page":   int32(1),
+		"limit":  int32(10),
+	}
+
+	if p.Offset > 0 {
+		options["offset"] = p.Offset
+	}
+
+	if p.Page > 0 {
+		options["page"] = p.Page
+	}
+
+	if p.Limit > 0 {
+		options["limit"] = p.Limit
+	}
+
+	log.Printf("\n\n PROFILE: %v\n\n", p.Profile)
 	var query map[string]interface{}
-	inrec, _ := json.Marshal(p)
+	inrec, _ := json.Marshal(p.Profile)
 	json.Unmarshal(inrec, &query)
 
 	var profiles []*pb.Profile
-	profiles, e := Find(query)
+
+	log.Printf("\n\n QUERY: %v\n\n", query)
+	profiles, e := Find(query, options)
 	if e != nil {
 		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
 
-	log.Printf("length: %v", len(profiles))
 	count := int32(len(profiles))
+
+	log.Printf("options: %v", options)
 
 	return &pb.Profiles{
 		Count:    count,

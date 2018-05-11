@@ -15,7 +15,12 @@ PROFILE="{\
 
 CREATE_PROFILE=${PROFILE}
 
-FIND_PROFILE=${PROFILE}
+FIND_PROFILE="{
+  \"offset\":0,
+  \"limit\":15,
+  \"page\":2,
+  \"profile\":${PROFILE}
+}"
 
 UPDATE_PROFILE="{
   \"id\":\"${PROFILE_ID}\",

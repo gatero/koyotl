@@ -2,7 +2,6 @@ package main
 
 import (
 	"app/profile"
-	"fmt"
 	"log"
 	"net"
 
@@ -30,5 +29,5 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-	fmt.Printf("listen:%v", port)
+	log.Printf("listen:%v", port)
 }
