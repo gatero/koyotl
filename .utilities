@@ -19,7 +19,7 @@ FIND_PROFILE="{
   \"offset\":0,
   \"limit\":15,
   \"page\":2,
-  \"profile\":${PROFILE}
+  \"query\":${PROFILE}
 }"
 
 UPDATE_PROFILE="{

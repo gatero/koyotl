@@ -11,7 +11,7 @@ import (
 
 // Find method get all the user instances
 // that exist into the database
-func Find(query *pb.Profile, options map[string]interface{}) ([]*pb.Profile, error) {
+func Find(query interface{}, options map[string]interface{}) ([]*pb.Profile, error) {
 	// get the collection pointer
 	c, _ := Collection()
 	// declare and empty array
@@ -20,7 +20,7 @@ func Find(query *pb.Profile, options map[string]interface{}) ([]*pb.Profile, err
 	offset := int(options["page"].(int32) * options["offset"].(int32))
 	limit := int(options["limit"].(int32))
 
-	if e := c.Find(query).Sort("name").Skip(offset).Limit(limit).All(&p); e != nil {
+	if e := c.Find(query.(*pb.Profile)).Sort("name").Skip(offset).Limit(limit).All(&p); e != nil {
 		// if an error is ocurred then the
 		// return the corresponding error
 		return nil, e
