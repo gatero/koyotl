@@ -37,15 +37,15 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Profile struct {
-	FirebaseId string `protobuf:"bytes,2,opt,name=firebaseId" bson:"FirebaseId,omitempty"`
-	Name       string `protobuf:"bytes,3,opt,name=name" bson:"Name,omitempty"`
-	Alias      string `protobuf:"bytes,4,opt,name=alias" bson:"Alias,omitempty"`
-	Username   string `protobuf:"bytes,5,opt,name=username" bson:"Username,omitempty"`
-	Lastname   string `protobuf:"bytes,6,opt,name=lastname" bson:"Lastname,omitempty"`
-	Email      string `protobuf:"bytes,7,opt,name=email" bson:"Email,omitempty"`
-	Birthday   string `protobuf:"bytes,8,opt,name=birthday" bson:"Birthday,omitempty"`
-	Status     string `protobuf:"bytes,9,opt,name=status" bson:"Status,omitempty"`
-	Role       string `protobuf:"bytes,10,opt,name=role" bson:"Role,omitempty"`
+	FirebaseId string `protobuf:"bytes,2,opt,name=firebaseId" json:"firebaseId,omitempty"`
+	Name       string `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	Alias      string `protobuf:"bytes,4,opt,name=alias" json:"alias,omitempty"`
+	Username   string `protobuf:"bytes,5,opt,name=username" json:"username,omitempty"`
+	Lastname   string `protobuf:"bytes,6,opt,name=lastname" json:"lastname,omitempty"`
+	Email      string `protobuf:"bytes,7,opt,name=email" json:"email,omitempty"`
+	Birthday   string `protobuf:"bytes,8,opt,name=birthday" json:"birthday,omitempty"`
+	Status     string `protobuf:"bytes,9,opt,name=status" json:"status,omitempty"`
+	Role       string `protobuf:"bytes,10,opt,name=role" json:"role,omitempty"`
 }
 
 func (m *Profile) Reset()                    { *m = Profile{} }

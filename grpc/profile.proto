@@ -1,11 +1,32 @@
 syntax = "proto3";
+
 package grpc;
 
+import "google/api/annotations.proto";
+
 service ProfileService {
-  rpc Create(Profile) returns (Profile) {}
-  rpc Find(FindProfile) returns (Profiles) {}
-  rpc Update(UpdateProfile) returns (Profile) {}
-  rpc DeleteById(DeleteProfile) returns (Profile) {}
+  rpc Create(Profile) returns (Profile) {
+    option (google.api.http) = {
+      post: "/profile",
+      body: "*"
+    };
+  }
+  rpc Find(FindProfile) returns (Profiles) {
+    option (google.api.http) = {
+      get: "/profile"
+    };
+  }
+  rpc Update(UpdateProfile) returns (Profile) {
+    option (google.api.http) = {
+      patch: "/profile/{id}",
+      body: "*"
+    };
+  }
+  rpc DeleteById(DeleteProfile) returns (Profile) {
+    option (google.api.http) = {
+      delete: "/delete/{id}"
+    };
+  }
 }
 
 message Profile {
