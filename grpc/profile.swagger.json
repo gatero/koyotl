@@ -1,0 +1,276 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "profile.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/delete/{id}": {
+      "delete": {
+        "operationId": "DeleteById",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/grpcProfile"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ProfileService"
+        ]
+      }
+    },
+    "/profile": {
+      "get": {
+        "operationId": "Find",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/grpcProfiles"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.firebaseId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.alias",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.lastname",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.birthday",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.status",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "query.role",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ProfileService"
+        ]
+      },
+      "post": {
+        "operationId": "Create",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/grpcProfile"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/grpcProfile"
+            }
+          }
+        ],
+        "tags": [
+          "ProfileService"
+        ]
+      }
+    },
+    "/profile/{id}": {
+      "patch": {
+        "operationId": "Update",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/grpcProfile"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/grpcUpdateProfile"
+            }
+          }
+        ],
+        "tags": [
+          "ProfileService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "grpcProfile": {
+      "type": "object",
+      "properties": {
+        "firebaseId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "grpcProfiles": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/grpcProfile"
+          }
+        }
+      }
+    },
+    "grpcUpdateProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/definitions/grpcProfile"
+        }
+      }
+    }
+  }
+}

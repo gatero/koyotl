@@ -25,8 +25,10 @@ func main() {
 	pb.RegisterProfileServiceServer(s, &profile.RPC{})
 	reflection.Register(s)
 
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	e := s.Serve(lis)
+	log.Fatalf("failed to serve: %v", e)
+	if e != nil {
+		log.Fatalf("failed to serve: %v", e)
 	}
 
 	log.Printf("listen:%v", port)

@@ -13,7 +13,10 @@ import (
 // that exist into the database
 func Find(query interface{}, options map[string]interface{}) ([]*pb.Profile, error) {
 	// get the collection pointer
-	c, _ := Collection()
+	c, e := Collection()
+	if e != nil {
+		return nil, e
+	}
 	// declare and empty array
 	var p []*pb.Profile
 
@@ -51,7 +54,6 @@ func (rpc *RPC) Find(ctx context.Context, p *pb.FindProfile) (*pb.Profiles, erro
 	var profiles []*pb.Profile
 
 	profiles, e := Find(p.Query, options)
-	log.Printf("PROFILES: %v\n\n", profiles)
 	if e != nil {
 		return nil, grpc.Errorf(codes.Internal, e.Error())
 	}
