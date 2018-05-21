@@ -25,6 +25,4 @@ func Collection() (*mgo.Collection, error) {
 	return s.DB(MONGO_DATABASE).C(COLLECTION), nil
 }
 
-type Action struct{}
-
 type RPC struct{}

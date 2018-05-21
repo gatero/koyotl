@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/profile"
+	"fmt"
 	"log"
 	"net"
 
@@ -16,20 +17,18 @@ const (
 )
 
 func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+	lis, e := net.Listen("tcp", port)
+	if e != nil {
+		log.Fatalf("failed to listen: %v", e)
 	}
 
 	s := grpc.NewServer()
 	pb.RegisterProfileServiceServer(s, &profile.RPC{})
 	reflection.Register(s)
 
-	e := s.Serve(lis)
-	log.Fatalf("failed to serve: %v", e)
-	if e != nil {
-		log.Fatalf("failed to serve: %v", e)
+	if e := s.Serve(lis); e != nil {
+		log.Printf("failed to serve: %v", e)
 	}
 
-	log.Printf("listen:%v", port)
+	fmt.Printf("\n\n LISTEN ON: %v\n\n", port)
 }
