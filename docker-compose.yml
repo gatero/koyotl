@@ -2,7 +2,7 @@ version: '3.5'
 services:
   service:
     env_file:
-      - .env
+      - ./.env
     image: $API_IMAGE
     container_name: $API_CONTAINER
     depends_on:
@@ -13,7 +13,7 @@ services:
       - $API_VOLUME
   mongo:
     env_file:
-      - .env
+      - ./.env
     image: $MONGO_IMAGE
     container_name: $MONGO_CONTAINER
     expose:
