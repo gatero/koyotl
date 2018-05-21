@@ -1,1 +1,23 @@
-.mestli/docker-compose/golang-mysql-mongo.yml
+version: '3.5'
+services:
+  service:
+    env_file:
+      - .env
+    image: $API_IMAGE
+    container_name: $API_CONTAINER
+    depends_on:
+      - mongo
+    expose:
+      - $API_PORT
+    volumes:
+      - $API_VOLUME
+  mongo:
+    env_file:
+      - .env
+    image: $MONGO_IMAGE
+    container_name: $MONGO_CONTAINER
+    expose:
+      - $MONGO_PORT
+networks:
+  default:
+    name: $NETWORK
